@@ -1,0 +1,11 @@
+SELECT * FROM employees;
+
+SELECT * FROM employees WHERE role = 'engineer';
+
+SELECT * FROM employees WHERE username = 'engineer1';
+
+UPDATE employees 
+SET phone_no = '9999999999', email = 'new.email@example.com', password = 'newSecurePassword' 
+WHERE employee_id = 1;
+
+DELETE FROM employees WHERE employee_id = 5;
