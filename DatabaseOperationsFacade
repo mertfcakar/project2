@@ -1,0 +1,164 @@
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class DatabaseOperationsFacade {
+
+    private static final String DB_URL = "jdbc:mysql://localhost:3306/FirmManagement";
+    private static final String DB_USER = "root";
+    private static final String DB_PASSWORD = "password";
+
+    // Establish a connection to the database
+    private Connection connect() throws SQLException {
+        return DriverManager.getConnection(DB_URL, DB_USER, DB_PASSWORD);
+    }
+
+    // Retrieve all employees from the database
+    public List<Employee> getAllEmployees() {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employees";
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                employees.add(mapEmployee(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching employees: " + e.getMessage());
+        }
+        return employees;
+    }
+
+    // Retrieve employees by role
+    public List<Employee> getEmployeesByRole(String role) {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employees WHERE role = ?";
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, role);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                employees.add(mapEmployee(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching employees by role: " + e.getMessage());
+        }
+        return employees;
+    }
+
+    // Retrieve a single employee by username
+    public Employee getEmployeeByUsername(String username) {
+        String query = "SELECT * FROM employees WHERE username = ?";
+        Employee employee = null;
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, username);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                employee = mapEmployee(rs);
+            }
+        } catch (SQLException e) {
+            System.err.println("Error fetching employee by username: " + e.getMessage());
+        }
+        return employee;
+    }
+
+    // Insert a new employee into the database
+    public boolean insertEmployee(Employee employee, String defaultPassword) {
+        String query = "INSERT INTO employees (username, password, role, name, surname, phone_no, date_of_birth, date_of_start, email) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, employee.getUsername());
+            stmt.setString(2, defaultPassword);
+            stmt.setString(3, employee.getRole());
+            stmt.setString(4, employee.getName());
+            stmt.setString(5, employee.getSurname());
+            stmt.setString(6, employee.getPhoneNo());
+            stmt.setDate(7, Date.valueOf(employee.getDateOfBirth()));
+            stmt.setDate(8, Date.valueOf(employee.getDateOfStart()));
+            stmt.setString(9, employee.getEmail());
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error inserting employee: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Update an employee's non-profile fields
+    public boolean updateEmployeeNonProfile(int employeeId, String phoneNo, String email, String password) {
+        String query = "UPDATE employees SET phone_no = ?, email = ?, password = ? WHERE employee_id = ?";
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setString(1, phoneNo);
+            stmt.setString(2, email);
+            stmt.setString(3, password);
+            stmt.setInt(4, employeeId);
+
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error updating employee: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Delete an employee by ID
+    public boolean deleteEmployee(int employeeId) {
+        String query = "DELETE FROM employees WHERE employee_id = ?";
+
+        try (Connection conn = connect();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+
+            stmt.setInt(1, employeeId);
+            return stmt.executeUpdate() > 0;
+        } catch (SQLException e) {
+            System.err.println("Error deleting employee: " + e.getMessage());
+        }
+        return false;
+    }
+
+    // Perform complex queries
+    public List<Employee> performComplexQuery(String condition) {
+        List<Employee> employees = new ArrayList<>();
+        String query = "SELECT * FROM employees WHERE " + condition;
+
+        try (Connection conn = connect();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                employees.add(mapEmployee(rs));
+            }
+        } catch (SQLException e) {
+            System.err.println("Error performing complex query: " + e.getMessage());
+        }
+        return employees;
+    }
+
+    // Helper method to map ResultSet data to Employee objects
+    private Employee mapEmployee(ResultSet rs) throws SQLException {
+        return new Employee(
+                rs.getInt("employee_id"),
+                rs.getString("username"),
+                rs.getString("name"),
+                rs.getString("surname"),
+                rs.getString("role"),
+                rs.getString("phone_no"),
+                rs.getDate("date_of_birth").toLocalDate(),
+                rs.getDate("date_of_start").toLocalDate(),
+                rs.getString("email")
+        );
+    }
+}
