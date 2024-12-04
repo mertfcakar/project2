@@ -1,7 +1,15 @@
 import java.util.*;
 
+/**
+ * An employee management and sorting performance system that provides 
+ * employee profile management and comparative sorting algorithm analysis.
+ */
 public class EmployeeSortingSystem {
-    // Abstract Employee class remains the same as in the original Employee.java
+    
+    /**
+     * An abstract base class representing an employee with core personal and 
+     * professional information and basic profile management capabilities.
+     */
     public abstract static class Employee {
         private int employeeId;
         private String username;
@@ -13,6 +21,19 @@ public class EmployeeSortingSystem {
         private String email;
         private String password;
 
+        /**
+         * Constructs a new Employee with comprehensive personal details.
+         * 
+         * @param employeeId Unique identifier for the employee
+         * @param username Login username for the employee
+         * @param name First name of the employee
+         * @param surname Last name of the employee
+         * @param phoneNo Contact phone number
+         * @param dateOfBirth Employee's date of birth
+         * @param dateOfStart Date when employee started working
+         * @param email Employee's email address
+         * @param password Employee's login password
+         */
         public Employee(int employeeId, String username, String name, String surname, String phoneNo,
                         String dateOfBirth, String dateOfStart, String email, String password) {
             this.employeeId = employeeId;
@@ -26,19 +47,75 @@ public class EmployeeSortingSystem {
             this.password = password;
         }
 
+        /**
+         * Abstract method to display a menu specific to the employee type.
+         * Must be implemented by subclasses.
+         */
         public abstract void displayMenu();
 
+        // Getter methods with comprehensive documentation
+        
+        /**
+         * Retrieves the employee's first name.
+         * @return First name of the employee
+         */
         public String getName() { return name; }
+
+        /**
+         * Retrieves the employee's last name.
+         * @return Last name of the employee
+         */
         public String getSurname() { return surname; }
+
+        /**
+         * Retrieves the employee's phone number.
+         * @return Contact phone number
+         */
         public String getPhoneNo() { return phoneNo; }
+
+        /**
+         * Retrieves the employee's email address.
+         * @return Email address
+         */
         public String getEmail() { return email; }
+
+        /**
+         * Retrieves the employee's login password.
+         * @return Login password (Note: In a real-world scenario, 
+         * password should be handled more securely)
+         */
         public String getPassword() { return password; }
+
+        /**
+         * Retrieves the employee's unique identifier.
+         * @return Unique employee ID
+         */
         public int getEmployeeId() { return employeeId; }
 
+        // Setter methods with documentation
+
+        /**
+         * Updates the employee's phone number.
+         * @param phoneNo New phone number to set
+         */
         public void setPhoneNo(String phoneNo) { this.phoneNo = phoneNo; }
+
+        /**
+         * Updates the employee's email address.
+         * @param email New email address to set
+         */
         public void setEmail(String email) { this.email = email; }
+
+        /**
+         * Updates the employee's login password.
+         * @param password New password to set
+         */
         public void setPassword(String password) { this.password = password; }
 
+        /**
+         * Interactively updates the employee's profile information.
+         * Prompts the user to enter new phone number, email, and password.
+         */
         public void updateProfile() {
             Scanner scanner = new Scanner(System.in);
             System.out.println("Enter new phone number: ");
@@ -55,12 +132,20 @@ public class EmployeeSortingSystem {
             System.out.println("Profile updated successfully!");
         }
 
+        /**
+         * Displays the employee's basic profile information.
+         * Shows name, phone number, and email.
+         */
         public void displayProfile() {
             System.out.println("Name: " + name + " " + surname);
             System.out.println("Phone number: " + phoneNo);
             System.out.println("Email: " + email);
         }
 
+        /**
+         * Displays non-profile related employee information.
+         * Shows employee ID, date of birth, and start date.
+         */
         public void displayNonProfile() {
             System.out.println("Employee ID: " + employeeId);
             System.out.println("Date of Birth: " + dateOfBirth);
@@ -68,10 +153,19 @@ public class EmployeeSortingSystem {
         }
     }
 
-    // Sorting Performance class with all original sorting methods
+    /**
+     * A utility class for comparing the performance of various sorting algorithms.
+     * Implements multiple sorting techniques and provides performance measurement.
+     */
     public static class SortingPerformance {
         private int[] originalArray;
         
+        /**
+         * Runs a comprehensive comparison of sorting algorithms.
+         * 
+         * @param datasetSize Number of elements to sort (must be between 1,000 and 10,000)
+         * @throws IllegalArgumentException if dataset size is out of valid range
+         */
         public void runSortingAlgorithmsComparison(int datasetSize) {
             // Validate input
             if (datasetSize < 1000 || datasetSize > 10000) {
@@ -106,17 +200,35 @@ public class EmployeeSortingSystem {
                            radixCorrect, shellCorrect, heapCorrect, insertionCorrect);
         }
         
+        /**
+         * Generates an array of random integers.
+         * 
+         * @param size Number of elements in the array
+         * @return Array of random integers between -10000 and 10000
+         */
         private int[] generateRandomArray(int size) {
             Random rand = new Random();
             return rand.ints(size, -10000, 10001).toArray();
         }
         
+        /**
+         * Measures the execution time of a sorting method.
+         * 
+         * @param array Array to be sorted
+         * @param sortMethod Sorting method to execute
+         * @return Execution time in nanoseconds
+         */
         private long measureSortTime(int[] array, Runnable sortMethod) {
             long startTime = System.nanoTime();
             sortMethod.run();
             return System.nanoTime() - startTime;
         }
         
+        /**
+         * Implements Radix Sort algorithm for non-negative and negative integers.
+         * 
+         * @param arr Array to be sorted
+         */
         private void radixSort(int[] arr) {
             if (arr == null || arr.length == 0) return;
             
@@ -127,6 +239,12 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Helper method for Radix Sort implementing counting sort for a specific digit.
+         * 
+         * @param arr Array to be sorted
+         * @param exp Current digit/place value being sorted
+         */
         private void countingSort(int[] arr, int exp) {
             int n = arr.length;
             int[] output = new int[n];
@@ -150,6 +268,11 @@ public class EmployeeSortingSystem {
             System.arraycopy(output, 0, arr, 0, n);
         }
         
+        /**
+         * Implements Shell Sort algorithm for sorting arrays.
+         * 
+         * @param arr Array to be sorted
+         */
         private void shellSort(int[] arr) {
             int n = arr.length;
             for (int gap = n/2; gap > 0; gap /= 2) {
@@ -164,6 +287,11 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Implements Heap Sort algorithm for sorting arrays.
+         * 
+         * @param arr Array to be sorted
+         */
         private void heapSort(int[] arr) {
             int n = arr.length;
             
@@ -180,6 +308,13 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Heapifies a subtree rooted at index i.
+         * 
+         * @param arr Array containing the heap
+         * @param n Size of the heap
+         * @param i Root index of the subtree
+         */
         private void heapify(int[] arr, int n, int i) {
             int largest = i;
             int l = 2 * i + 1;
@@ -200,6 +335,11 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Implements Insertion Sort algorithm for sorting arrays.
+         * 
+         * @param arr Array to be sorted
+         */
         private void insertionSort(int[] arr) {
             int n = arr.length;
             for (int i = 1; i < n; ++i) {
@@ -214,6 +354,11 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Uses Java's built-in Collections.sort() method for sorting.
+         * 
+         * @param arr Array to be sorted
+         */
         private void collectionSort(int[] arr) {
             Integer[] boxedArray = Arrays.stream(arr).boxed().toArray(Integer[]::new);
             Arrays.sort(boxedArray);
@@ -222,6 +367,19 @@ public class EmployeeSortingSystem {
             }
         }
         
+        /**
+         * Displays the performance results of different sorting algorithms.
+         * 
+         * @param radixTime Execution time for Radix Sort
+         * @param shellTime Execution time for Shell Sort
+         * @param heapTime Execution time for Heap Sort
+         * @param insertionTime Execution time for Insertion Sort
+         * @param collectionsTime Execution time for Collections Sort
+         * @param radixCorrect Indicates if Radix Sort produced correct results
+         * @param shellCorrect Indicates if Shell Sort produced correct results
+         * @param heapCorrect Indicates if Heap Sort produced correct results
+         * @param insertionCorrect Indicates if Insertion Sort produced correct results
+         */
         private void displayResults(long radixTime, long shellTime, long heapTime, 
                                     long insertionTime, long collectionsTime,
                                     boolean radixCorrect, boolean shellCorrect, 
