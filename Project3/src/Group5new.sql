@@ -135,17 +135,39 @@ INSERT INTO movies (title, poster_path, summary_path, duration) VALUES
 ('Pulp Fiction', '/posters/pulp_fiction.jpg', '/summaries/pulp_fiction.txt', 120);
 
 INSERT INTO movie_genres (movie_id, genre) VALUES
+-- The Matrix (Sci-Fi, Action, Cyberpunk, Philosophy)
 (1, 'Sci-Fi'),
 (1, 'Action'),
+(1, 'Cyberpunk'),
+(1, 'Philosophy'),
+
+-- Inception (Sci-Fi, Action, Thriller, Mystery, Heist)
 (2, 'Sci-Fi'),
 (2, 'Action'),
 (2, 'Thriller'),
+(2, 'Mystery'),
+(2, 'Heist'),
+
+-- Interstellar (Sci-Fi, Drama, Adventure, Space, Mystery)
 (3, 'Sci-Fi'),
 (3, 'Drama'),
+(3, 'Adventure'),
+(3, 'Space'),
+(3, 'Mystery'),
+
+-- The Dark Knight (Action, Drama, Crime, Thriller, Superhero)
 (4, 'Action'),
 (4, 'Drama'),
+(4, 'Crime'),
+(4, 'Thriller'),
+(4, 'Superhero'),
+
+-- Pulp Fiction (Crime, Drama, Dark Comedy, Thriller, Neo-noir)
 (5, 'Crime'),
-(5, 'Drama');
+(5, 'Drama'),
+(5, 'Dark Comedy'),
+(5, 'Thriller'),
+(5, 'Neo-noir');
 
 INSERT INTO products (name, type, price, stock_quantity, image_path) VALUES
 ('Cola', 'beverage', 15.00, 100, '/products/cola.jpg'),
